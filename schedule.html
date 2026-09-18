@@ -48,11 +48,12 @@
     .status-sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
     .toolbar { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin: 20px 0 14px; }
     .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 3px; scrollbar-width: thin; }
-    .tab, .action { border: 1px solid var(--line); color: var(--text); background: var(--surface); border-radius: 12px; padding: 9px 12px; font-weight: 800; white-space: nowrap; transition: .18s ease; }
+    .tab, .action { border: 1px solid var(--line); color: var(--text); background: var(--surface); border-radius: 12px; padding: 9px 12px; font-weight: 800; white-space: nowrap; transition: .18s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
     .tab:hover, .action:hover { transform: translateY(-1px); border-color: #cbd2c2; }
     .tab.active { background: var(--accent); color: white; border-color: var(--accent); }
     .actions { display: flex; gap: 8px; flex: 0 0 auto; }
     .action.secondary.active { background: var(--accent-soft); color: var(--accent); border-color: #cfd9bf; }
+    .action.course-link { background: var(--accent); color: #fff; border-color: var(--accent); }
     .schedule { display: grid; gap: 18px; }
     .day { overflow: hidden; }
     .day-head { padding: 17px 19px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; justify-content: space-between; background: linear-gradient(180deg, #ffffff 0%, #fbfcf9 100%); }
@@ -102,7 +103,7 @@
       <div class="panel next-card"><div class="next-icon">›</div><div><div class="label">Наступна подія</div><div class="next-title" id="nextTitle">—</div><div class="next-meta" id="nextMeta">—</div></div></div>
       <div class="panel status-card"><div class="label">Статус курсу</div><div class="status-main" id="courseStatus">—</div><div class="status-sub" id="courseStatusSub">—</div></div>
     </section>
-    <section class="toolbar" aria-label="Керування розкладом"><div class="tabs" id="tabs"></div><div class="actions"><button class="action secondary" id="classOnlyBtn" type="button" title="Приховати блоки самостійної роботи">Лише заняття</button><button class="action" id="printBtn" type="button">Друк / PDF</button></div></section>
+    <section class="toolbar" aria-label="Керування розкладом"><div class="tabs" id="tabs"></div><div class="actions"><a class="action course-link" href="index.html">← До курсу</a><button class="action secondary" id="classOnlyBtn" type="button" title="Приховати блоки самостійної роботи">Лише заняття</button><button class="action" id="printBtn" type="button">Друк / PDF</button></div></section>
     <section class="schedule" id="schedule" aria-live="polite"></section>
     <section class="panel legend"><div class="label">Позначення з вихідного розкладу</div><div class="legend-grid"><span class="legend-item"><strong>ІАТ</strong> — код підрозділу</span><span class="legend-item"><strong>ГЗ / К / Л / ЛД / С / ПЗ / Залік</strong> — тип заняття</span><span class="legend-item"><strong>ДН</strong> — позначка з оригінального розкладу</span><span class="legend-item"><strong>online</strong> — дистанційний формат</span></div><div class="source-note">Веб-сторінку сформовано за даними Excel-файлу «Розклад КПК ШІ 2026-2.xlsx». Назви та коди збережено без зміни змісту.</div></section>
   </main>
