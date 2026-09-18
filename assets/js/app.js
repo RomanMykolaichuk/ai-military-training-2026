@@ -89,7 +89,7 @@
 
         <section class="notice">
           <strong>Повний контент курсу доступний</strong>
-          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 10–12 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
+          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 12–14 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
         </section>
 
         <section class="section" id="topics">
@@ -203,6 +203,22 @@
     </section>`;
   }
 
+  function visualBlock(block, index) {
+    const center = block.center ? `<div class="visual-center">${esc(block.center)}</div>` : "";
+    return `<section class="content-block visual-block" data-visual="${index}">
+      <div class="visual-kicker">ВІЗУАЛЬНА СХЕМА</div>
+      <h2>${esc(block.title)}</h2>
+      ${block.subtitle ? `<p class="visual-subtitle">${esc(block.subtitle)}</p>` : ""}
+      <div class="visual-stage visual-${esc(block.layout || "pipeline")}">
+        ${center}
+        <div class="visual-items">
+          ${block.items.map((item,i) => `<button type="button" class="visual-node" data-detail="${esc(item.detail)}"><span class="visual-index">${String(i+1).padStart(2,"0")}</span><strong>${esc(item.label)}</strong></button>`).join("")}
+        </div>
+      </div>
+      <div class="visual-detail" aria-live="polite">Натисніть на елемент схеми, щоб побачити пояснення.</div>
+    </section>`;
+  }
+
   function riskBlock(block) {
     return `<section class="content-block risk-block"><h2>${esc(block.title)}</h2><p>${esc(block.description)}</p>
       <div class="risk-grid">
@@ -242,6 +258,7 @@
     if (block.type === "checklist") return checklistBlock(block, index);
     if (block.type === "rank") return rankBlock(block, index);
     if (block.type === "sequence") return sequenceBlock(block, index);
+    if (block.type === "visual") return visualBlock(block, index);
     if (block.type === "risk") return riskBlock(block);
     if (block.type === "exercise") return exerciseBlock(block);
     if (block.type === "check") return checkBlock(block);
@@ -365,6 +382,17 @@
     });
   }
 
+  function bindVisuals() {
+    $(".visual-block").forEach(block => {
+      const detail = $(".visual-detail", block);
+      $(".visual-node", block).forEach(node => node.addEventListener("click", () => {
+        $(".visual-node", block).forEach(n => n.classList.remove("active"));
+        node.classList.add("active");
+        detail.textContent = node.dataset.detail || "";
+      }));
+    });
+  }
+
   function bindRiskChecker() {
     const btn = $("#riskCheckBtn");
     if (!btn) return;
@@ -469,6 +497,7 @@
     bindChecklists();
     bindRanks();
     bindSequences();
+    bindVisuals();
     bindRiskChecker();
     bindQuiz();
     bindCompletion(id);
