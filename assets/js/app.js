@@ -102,7 +102,7 @@
         <section class="section">
           <div class="topic">
             <header class="topic-head">
-              <div><h3>${esc(course.final.title)}</h3><p>${esc(course.final.description)} Підготовка до захисту виконується під час заняття 2/8.</p></div>
+              <div><h3>${esc(course.final.title)}</h3><p>${esc(course.final.description)} Підготовка до захисту виконується під час заняття 2/8.</p><p><a class="open-label" href="final.html">Відкрити сторінку підсумкового контролю →</a></p></div>
               <span class="hours">${course.final.hours} год</span>
             </header>
           </div>
@@ -352,8 +352,43 @@
     bindCompletion(id);
   }
 
+  function renderFinal() {
+    const root = $("#app");
+    if (!root) return;
+    root.innerHTML = `${nav()}<main class="shell">
+      <section class="lesson-hero">
+        <a class="back" href="index.html">← До курсу</a>
+        <div class="eyebrow" style="color:var(--accent)">Підсумковий контроль · 4 години</div>
+        <h1 class="lesson-title">Захист групового проєкту</h1>
+        <p class="lesson-lead">Підсумковий контроль узагальнює курс: група демонструє невеликий завершений продукт, пояснює роль ШІ, показує результат і окремо описує людську перевірку, обмеження та безпечне поводження з даними.</p>
+      </section>
+      <section class="outcomes">
+        <div class="panel"><h3>Що підготувати</h3><ul class="outcome-list"><li>Чітко сформульована проблема та цільова аудиторія.</li><li>Демонстраційний продукт на відкритих, синтетичних або дозволених даних.</li><li>Одна візуальна схема / інфографіка.</li><li>Практична демонстрація застосованого AI-підходу.</li></ul></div>
+        <div class="panel"><h3>Що пояснити</h3><ul class="outcome-list"><li>Чому обрано саме цей підхід.</li><li>Які дані та обмеження використано.</li><li>Що створив ШІ, а що перевірила людина.</li><li>Які ризики залишаються та як їх контролювати.</li></ul></div>
+      </section>
+      <div class="lesson-content">
+        <section class="content-block"><h2>Рекомендована структура захисту</h2><div class="timeline">
+          <article class="timeline-item"><div class="timeline-dot">1</div><div><h3>Проблема</h3><p>30–60 секунд: що потрібно було вирішити.</p></div></article>
+          <article class="timeline-item"><div class="timeline-dot">2</div><div><h3>Задум</h3><p>Яку роль виконує ШІ та чому це доцільно.</p></div></article>
+          <article class="timeline-item"><div class="timeline-dot">3</div><div><h3>Демонстрація</h3><p>Показати готовий матеріал, prompt, схему або прототип.</p></div></article>
+          <article class="timeline-item"><div class="timeline-dot">4</div><div><h3>Перевірка</h3><p>Пояснити, що і як перевіряла людина.</p></div></article>
+          <article class="timeline-item"><div class="timeline-dot">5</div><div><h3>Обмеження</h3><p>Назвати ризики, невизначеність і напрям подальшого покращення.</p></div></article>
+        </div></section>
+        <section class="content-block"><h2>Checklist перед захистом</h2><div class="info-cards">
+          <article class="info-card"><span class="info-num">01</span><h3>Зміст</h3><p>Немає вигаданих фактів; терміни і ключові твердження перевірені.</p></article>
+          <article class="info-card"><span class="info-num">02</span><h3>Дані</h3><p>У демонстрації немає чутливих або недозволених даних.</p></article>
+          <article class="info-card"><span class="info-num">03</span><h3>Прозорість</h3><p>Зрозуміло, де використовувався ШІ і які частини редагувала людина.</p></article>
+          <article class="info-card"><span class="info-num">04</span><h3>Візуалізація</h3><p>Схема або інфографіка пояснює матеріал, а не лише прикрашає.</p></article>
+          <article class="info-card"><span class="info-num">05</span><h3>Практичність</h3><p>Є конкретний результат, який можна показати за кілька хвилин.</p></article>
+          <article class="info-card"><span class="info-num">06</span><h3>Обмеження</h3><p>Група може назвати щонайменше два ризики або слабкі місця рішення.</p></article>
+        </div></section>
+      </div>
+      <div class="complete-row"><a class="btn ghost" href="lesson.html?id=t2-l8">← Повернутися до заняття 2/8</a><a class="btn olive" href="index.html">До головної</a></div>
+    </main>${footer()}`;
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const page = document.body.dataset.page;
-    if (page === "lesson") renderLesson(); else renderHome();
+    if (page === "lesson") renderLesson(); else if (page === "final") renderFinal(); else renderHome();
   });
 })();
