@@ -83,7 +83,7 @@
         <section class="stats" aria-label="Структура курсу">
           <div class="stat"><strong>2</strong><span>навчальні теми</span></div>
           <div class="stat"><strong>18</strong><span>годин теоретичної теми</span></div>
-          <div class="stat"><strong>30</strong><span>годин практичної теми</span></div>
+          <div class="stat"><strong>26</strong><span>інтерактивних візуальних схем</span></div>
           <div class="stat"><strong>${ready}/${allLessons.length}</strong><span>занять з інтерактивним контентом</span></div>
         </section>
 
@@ -383,10 +383,10 @@
   }
 
   function bindVisuals() {
-    $(".visual-block").forEach(block => {
+    $$(".visual-block").forEach(block => {
       const detail = $(".visual-detail", block);
-      $(".visual-node", block).forEach(node => node.addEventListener("click", () => {
-        $(".visual-node", block).forEach(n => n.classList.remove("active"));
+      $$(".visual-node", block).forEach(node => node.addEventListener("click", () => {
+        $$(".visual-node", block).forEach(n => n.classList.remove("active"));
         node.classList.add("active");
         detail.textContent = node.dataset.detail || "";
       }));
