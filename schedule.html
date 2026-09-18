@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Розклад КПК ШІ — 21–25 вересня 2026</title>
+  <style>
+    :root {
+      --bg: #f4f5ef;
+      --surface: #ffffff;
+      --surface-2: #f8f9f5;
+      --text: #1d241b;
+      --muted: #687064;
+      --line: #dfe4d8;
+      --accent: #556b2f;
+      --accent-2: #6a653a;
+      --accent-soft: #edf1e5;
+      --warn-soft: #fff4d8;
+      --warn: #8a6613;
+      --blue-soft: #eaf2f9;
+      --blue: #2f5f86;
+      --shadow: 0 14px 36px rgba(44, 53, 35, 0.09);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 64px; }
+    .hero { position: relative; overflow: hidden; border-radius: 28px; padding: clamp(24px, 4vw, 44px); color: white; background: radial-gradient(circle at 88% 12%, rgba(255,255,255,.16), transparent 30%), linear-gradient(135deg, #465a27 0%, #556b2f 52%, #6a653a 100%); box-shadow: var(--shadow); }
+    .hero::after { content: ""; position: absolute; width: 290px; height: 290px; right: -90px; bottom: -140px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; box-shadow: 0 0 0 36px rgba(255,255,255,.04), 0 0 0 72px rgba(255,255,255,.025); }
+    .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; opacity: .84; }
+    h1 { max-width: 880px; margin: 12px 0 14px; font-size: clamp(28px, 5vw, 48px); line-height: 1.08; letter-spacing: -.025em; }
+    .subtitle { max-width: 850px; margin: 0; font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,.88); }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
+    .hero-chip { border: 1px solid rgba(255,255,255,.24); background: rgba(255,255,255,.11); padding: 8px 11px; border-radius: 999px; font-size: 13px; font-weight: 700; backdrop-filter: blur(4px); }
+    .dashboard { display: grid; grid-template-columns: 1.35fr .85fr; gap: 16px; margin: 18px 0 24px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(44, 53, 35, 0.045); }
+    .next-card { padding: 20px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
+    .next-icon { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 24px; font-weight: 800; }
+    .label { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .next-title { font-size: 18px; font-weight: 850; margin: 3px 0 3px; }
+    .next-meta { color: var(--muted); font-size: 14px; }
+    .status-card { padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+    .status-main { font-size: 26px; line-height: 1.1; font-weight: 900; margin-top: 4px; }
+    .status-sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .toolbar { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin: 20px 0 14px; }
+    .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 3px; scrollbar-width: thin; }
+    .tab, .action { border: 1px solid var(--line); color: var(--text); background: var(--surface); border-radius: 12px; padding: 9px 12px; font-weight: 800; white-space: nowrap; transition: .18s ease; }
+    .tab:hover, .action:hover { transform: translateY(-1px); border-color: #cbd2c2; }
+    .tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .actions { display: flex; gap: 8px; flex: 0 0 auto; }
+    .action.secondary.active { background: var(--accent-soft); color: var(--accent); border-color: #cfd9bf; }
+    .schedule { display: grid; gap: 18px; }
+    .day { overflow: hidden; }
+    .day-head { padding: 17px 19px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; justify-content: space-between; background: linear-gradient(180deg, #ffffff 0%, #fbfcf9 100%); }
+    .day-title-wrap { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .date-badge { width: 48px; height: 48px; flex: 0 0 auto; border-radius: 14px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 900; line-height: 1; }
+    .date-badge small { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 2px; }
+    .day h2 { font-size: 19px; margin: 0; }
+    .day-date { color: var(--muted); font-size: 13px; margin-top: 2px; }
+    .day-state { font-size: 12px; font-weight: 850; padding: 6px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+    .day-state.today { background: var(--warn-soft); color: var(--warn); border-color: #efdda7; }
+    .day-state.next { background: var(--blue-soft); color: var(--blue); border-color: #cbddeb; }
+    .day-state.done { opacity: .72; }
+    .events { padding: 8px 16px 16px; }
+    .event { display: grid; grid-template-columns: 142px 1fr auto; gap: 16px; padding: 15px 4px; align-items: start; border-bottom: 1px solid #edf0e8; }
+    .event:last-child { border-bottom: 0; }
+    .time { font-weight: 900; font-size: 15px; }
+    .lesson-no { display: inline-block; margin-top: 5px; color: var(--muted); font-size: 12px; font-weight: 750; }
+    .event-title { font-weight: 850; font-size: 16px; }
+    .event-title.self { color: var(--muted); font-weight: 750; }
+    .event-sub { margin-top: 5px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 12px; }
+    .event-sub span { display: inline-flex; align-items: center; gap: 5px; }
+    .badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; max-width: 180px; }
+    .badge { font-size: 11px; line-height: 1; padding: 7px 8px; font-weight: 850; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--line); color: #4d5548; }
+    .badge.type { color: var(--accent); background: var(--accent-soft); border-color: #d6dec9; }
+    .badge.online { color: var(--blue); background: var(--blue-soft); border-color: #cfe0ed; }
+    .event.current { margin: 5px -8px; padding: 14px 12px; border-radius: 14px; border: 1px solid #d7e0c9; background: #f7faf2; }
+    .legend { margin-top: 18px; padding: 18px 20px; }
+    .legend-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .legend-item { font-size: 12px; border: 1px solid var(--line); background: var(--surface-2); padding: 7px 9px; border-radius: 9px; color: var(--muted); }
+    .legend-item strong { color: var(--text); }
+    .source-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
+    .empty { padding: 38px; text-align: center; color: var(--muted); }
+    @media (max-width: 780px) { .shell { width: min(100% - 20px, 1180px); padding-top: 10px; } .hero { border-radius: 22px; } .dashboard { grid-template-columns: 1fr; } .toolbar { align-items: stretch; flex-direction: column; } .actions { width: 100%; } .actions .action { flex: 1; } .event { grid-template-columns: 104px 1fr; gap: 10px; } .badges { grid-column: 2; justify-content: flex-start; max-width: none; margin-top: -5px; } .day-head { align-items: flex-start; } .day-state { display: none; } }
+    @media (max-width: 480px) { .hero { padding: 22px 18px; } .next-card { grid-template-columns: 1fr; } .next-icon { display: none; } .events { padding-inline: 12px; } .event { grid-template-columns: 1fr; } .badges { grid-column: 1; } .time { display: flex; align-items: baseline; gap: 8px; } .lesson-no { margin-top: 0; } }
+    @media print { :root { --bg: #fff; --shadow: none; } body { background: #fff; } .shell { width: 100%; padding: 0; } .hero { color: #111; background: #fff; border: 1px solid #aaa; box-shadow: none; padding: 18px; } .hero::after, .toolbar, .dashboard { display: none !important; } .hero-chip { color: #111; border-color: #bbb; background: #fff; } .subtitle { color: #333; } .schedule { gap: 10px; } .panel { box-shadow: none; break-inside: avoid; } .day { display: block !important; } .day-head { padding: 10px 12px; } .events { padding: 4px 10px 8px; } .event { padding: 8px 2px; } .legend { display: none; } @page { size: A4; margin: 10mm; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Тиждень №4 · 2026–2027 навчальний рік</div>
+      <h1>Розклад КПК з використання ШІ у військовій сфері</h1>
+      <p class="subtitle">Підвищення кваліфікації за напрямом використання елементів технологій штучного інтелекту у військовій сфері (базовий рівень)</p>
+      <div class="hero-meta"><span class="hero-chip">21–25.09.2026</span><span class="hero-chip">Курс №10356</span><span class="hero-chip">ПК ШІ ВС</span><span class="hero-chip">Переважно online</span></div>
+    </section>
+    <section class="dashboard" aria-label="Короткий огляд">
+      <div class="panel next-card"><div class="next-icon">›</div><div><div class="label">Наступна подія</div><div class="next-title" id="nextTitle">—</div><div class="next-meta" id="nextMeta">—</div></div></div>
+      <div class="panel status-card"><div class="label">Статус курсу</div><div class="status-main" id="courseStatus">—</div><div class="status-sub" id="courseStatusSub">—</div></div>
+    </section>
+    <section class="toolbar" aria-label="Керування розкладом"><div class="tabs" id="tabs"></div><div class="actions"><button class="action secondary" id="classOnlyBtn" type="button" title="Приховати блоки самостійної роботи">Лише заняття</button><button class="action" id="printBtn" type="button">Друк / PDF</button></div></section>
+    <section class="schedule" id="schedule" aria-live="polite"></section>
+    <section class="panel legend"><div class="label">Позначення з вихідного розкладу</div><div class="legend-grid"><span class="legend-item"><strong>ІАТ</strong> — код підрозділу</span><span class="legend-item"><strong>ГЗ / К / Л / ЛД / С / ПЗ / Залік</strong> — тип заняття</span><span class="legend-item"><strong>ДН</strong> — позначка з оригінального розкладу</span><span class="legend-item"><strong>online</strong> — дистанційний формат</span></div><div class="source-note">Веб-сторінку сформовано за даними Excel-файлу «Розклад КПК ШІ 2026-2.xlsx». Назви та коди збережено без зміни змісту.</div></section>
+  </main>
+  <script>
+    const scheduleData = [
+      { id: "2026-09-21", day: "Понеділок", dateLabel: "21 вересня 2026", month: "вер", dayNum: "21", events: [
+        { lessons: "1", start: "08:30", end: "09:10", unit: "ІАТ", type: "ГЗ", mark: "ДН", title: "Перше організаційне зібрання курсів", instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "2", start: "09:10", end: "09:50", unit: "ІАТ", type: "К", mark: "ДН", title: "Вхідний контроль", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "3–4", start: "10:00", end: "11:20", unit: "ІАТ", type: "Л", mark: "ДН", title: "1/1", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "5–6", start: "11:30", end: "12:50", unit: "ІАТ", type: "Л", mark: "ДН", title: "1/2", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "7–8", start: "13:30", end: "14:50", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "9–10", start: "15:00", end: "16:20", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "11–12", start: "16:30", end: "17:50", mark: "ДН", title: "Самостійна робота поза межами", self: true }
+      ]},
+      { id: "2026-09-22", day: "Вівторок", dateLabel: "22 вересня 2026", month: "вер", dayNum: "22", events: [
+        { lessons: "1–2", start: "08:30", end: "09:50", unit: "ІАТ", type: "ЛД", mark: "ДН", title: "1/3", online: true, instructors: ["МИКОЛАЙЧУК Р.А.", "ПРЕДСТАВНИК ЗАМОВНИКА"] },
+        { lessons: "3–4", start: "10:00", end: "11:20", unit: "ІАТ", type: "ГЗ", mark: "ДН", title: "1/4", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "5–6", start: "11:30", end: "12:50", unit: "ІАТ", type: "С", mark: "ДН", title: "1/5", online: true, instructors: ["МИКОЛАЙЧУК Р.А.", "ПРЕДСТАВНИК ЗАМОВНИКА"] },
+        { lessons: "7–8", start: "13:30", end: "14:50", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "9–10", start: "15:00", end: "16:20", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "11–12", start: "16:30", end: "17:50", mark: "ДН", title: "Самостійна робота поза межами", self: true }
+      ]},
+      { id: "2026-09-23", day: "Середа", dateLabel: "23 вересня 2026", month: "вер", dayNum: "23", events: [
+        { lessons: "1–2", start: "08:30", end: "09:50", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/1", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "3–4", start: "10:00", end: "11:20", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/2", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "5–6", start: "11:30", end: "12:50", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/3", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "7–8", start: "13:30", end: "14:50", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "9–10", start: "15:00", end: "16:20", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "11–12", start: "16:30", end: "17:50", mark: "ДН", title: "Самостійна робота поза межами", self: true }
+      ]},
+      { id: "2026-09-24", day: "Четвер", dateLabel: "24 вересня 2026", month: "вер", dayNum: "24", events: [
+        { lessons: "1–2", start: "08:30", end: "09:50", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/4", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "3–4", start: "10:00", end: "11:20", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/5", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "5–6", start: "11:30", end: "12:50", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/6", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "7–8", start: "13:30", end: "14:50", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "9–10", start: "15:00", end: "16:20", mark: "ДН", title: "Самостійна робота поза межами", self: true },
+        { lessons: "11–12", start: "16:30", end: "17:50", mark: "ДН", title: "Самостійна робота поза межами", self: true }
+      ]},
+      { id: "2026-09-25", day: "П’ятниця", dateLabel: "25 вересня 2026", month: "вер", dayNum: "25", events: [
+        { lessons: "1–2", start: "08:30", end: "09:50", unit: "ІАТ", type: "ЛД", mark: "ДН", title: "2/7", online: true, instructors: ["МИКОЛАЙЧУК Р.А."] },
+        { lessons: "3–4", start: "10:00", end: "11:20", unit: "ІАТ", type: "ПЗ", mark: "ДН", title: "2/8", online: true, instructors: ["МИКОЛАЙЧУК Р.А.", "ПРЕДСТАВНИК ЗАМОВНИКА"] },
+        { lessons: "5–6", start: "11:30", end: "12:50", unit: "ІАТ", type: "Залік", mark: "ДН", title: "Підсумковий контроль", online: true, instructors: ["МИКОЛАЙЧУК Р.А.", "ПРЕДСТАВНИК ЗАМОВНИКА"] }
+      ]}
+    ];
+    const KYIV_OFFSET = "+03:00";
+    const courseStart = new Date("2026-09-21T08:30:00" + KYIV_OFFSET);
+    const courseEnd = new Date("2026-09-25T12:50:00" + KYIV_OFFSET);
+    let activeDay = "all";
+    let classesOnly = false;
+    const tabsEl = document.getElementById("tabs");
+    const scheduleEl = document.getElementById("schedule");
+    const classOnlyBtn = document.getElementById("classOnlyBtn");
+    function eventDate(dayId, time) { return new Date(`${dayId}T${time}:00${KYIV_OFFSET}`); }
+    function escapeHtml(value = "") { return String(value).replace(/[&<>'"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[ch])); }
+    function renderTabs() { const items = [{ id: "all", label: "Усі дні" }, ...scheduleData.map(d => ({ id: d.id, label: `${d.day} · ${d.dayNum}` }))]; tabsEl.innerHTML = items.map(item => `<button type="button" class="tab ${activeDay === item.id ? "active" : ""}" data-day="${item.id}">${item.label}</button>`).join(""); tabsEl.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => { activeDay = btn.dataset.day; renderTabs(); renderSchedule(); })); }
+    function dayState(day, now) { const start = eventDate(day.id, day.events[0].start); const end = eventDate(day.id, day.events[day.events.length - 1].end); if (now >= start && now <= end) return { label: "сьогодні", cls: "today" }; if (now > end) return { label: "завершено", cls: "done" }; const futureDays = scheduleData.filter(d => eventDate(d.id, d.events[0].start) > now); if (futureDays[0]?.id === day.id) return { label: "наступний день", cls: "next" }; return { label: "заплановано", cls: "" }; }
+    function eventHtml(day, event, now) { const start = eventDate(day.id, event.start); const end = eventDate(day.id, event.end); const isCurrent = now >= start && now <= end; const instructorHtml = event.instructors?.length ? `<span>Викладач: ${event.instructors.map(escapeHtml).join(" · ")}</span>` : ""; const unitHtml = event.unit ? `<span>Підрозділ: ${escapeHtml(event.unit)}</span>` : ""; return `<article class="event ${isCurrent ? "current" : ""}" data-self="${event.self ? "1" : "0"}"><div class="time">${event.start}–${event.end}<span class="lesson-no">${escapeHtml(event.lessons)} пара</span></div><div><div class="event-title ${event.self ? "self" : ""}">${escapeHtml(event.title)}</div><div class="event-sub">${instructorHtml}${unitHtml}</div></div><div class="badges">${event.type ? `<span class="badge type">${escapeHtml(event.type)}</span>` : ""}${event.online ? `<span class="badge online">online</span>` : ""}${event.mark ? `<span class="badge">${escapeHtml(event.mark)}</span>` : ""}</div></article>`; }
+    function renderSchedule() { const now = new Date(); const days = activeDay === "all" ? scheduleData : scheduleData.filter(d => d.id === activeDay); const visibleDays = days.map(day => ({ ...day, events: classesOnly ? day.events.filter(e => !e.self) : day.events })).filter(d => d.events.length); if (!visibleDays.length) { scheduleEl.innerHTML = `<div class="panel empty">Немає подій для вибраного фільтра.</div>`; return; } scheduleEl.innerHTML = visibleDays.map(day => { const state = dayState(day, now); return `<section class="panel day" data-day="${day.id}"><header class="day-head"><div class="day-title-wrap"><div class="date-badge">${day.dayNum}<small>${day.month}</small></div><div><h2>${day.day}</h2><div class="day-date">${day.dateLabel}</div></div></div><span class="day-state ${state.cls}">${state.label}</span></header><div class="events">${day.events.map(e => eventHtml(day, e, now)).join("")}</div></section>`; }).join(""); }
+    function formatDelta(ms) { if (ms <= 0) return "зараз"; const totalMinutes = Math.floor(ms / 60000); const days = Math.floor(totalMinutes / 1440); const hours = Math.floor((totalMinutes % 1440) / 60); const mins = totalMinutes % 60; const parts = []; if (days) parts.push(`${days} дн.`); if (hours) parts.push(`${hours} год.`); if (!days && mins) parts.push(`${mins} хв.`); return `через ${parts.join(" ")}`; }
+    function updateDashboard() { const now = new Date(); const allEvents = scheduleData.flatMap(day => day.events.map(event => ({ day, event, start: eventDate(day.id, event.start), end: eventDate(day.id, event.end) }))); const current = allEvents.find(x => now >= x.start && now <= x.end); const next = current || allEvents.find(x => x.start > now); const nextTitle = document.getElementById("nextTitle"); const nextMeta = document.getElementById("nextMeta"); if (next) { nextTitle.textContent = next.event.title; nextMeta.textContent = `${next.day.day}, ${next.day.dayNum} вересня · ${next.event.start}–${next.event.end}${current ? " · триває зараз" : " · " + formatDelta(next.start - now)}`; } else { nextTitle.textContent = "Курс завершено"; nextMeta.textContent = "Заплановані події завершилися 25 вересня 2026 року."; } const statusMain = document.getElementById("courseStatus"); const statusSub = document.getElementById("courseStatusSub"); if (now < courseStart) { statusMain.textContent = "Ще не розпочато"; statusSub.textContent = `Початок 21.09 о 08:30 · ${formatDelta(courseStart - now)}`; } else if (now <= courseEnd) { const dayIndex = scheduleData.findIndex(day => now <= eventDate(day.id, day.events[day.events.length - 1].end)); statusMain.textContent = "Курс триває"; statusSub.textContent = dayIndex >= 0 ? `Навчальний день ${dayIndex + 1} із ${scheduleData.length}` : "За планом"; } else { statusMain.textContent = "Завершено"; statusSub.textContent = "Підсумковий контроль — 25.09.2026"; } }
+    classOnlyBtn.addEventListener("click", () => { classesOnly = !classesOnly; classOnlyBtn.classList.toggle("active", classesOnly); classOnlyBtn.textContent = classesOnly ? "Показати все" : "Лише заняття"; renderSchedule(); });
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    renderTabs(); renderSchedule(); updateDashboard(); setInterval(() => { updateDashboard(); renderSchedule(); }, 60000);
+  </script>
+</body>
+</html>
