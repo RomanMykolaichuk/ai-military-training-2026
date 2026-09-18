@@ -292,15 +292,15 @@
   }
 
   function bindFlashcards() {
-    $(".flash-card").forEach(card => card.addEventListener("click", () => {
+    $$(".flash-card").forEach(card => card.addEventListener("click", () => {
       card.classList.toggle("flipped");
       card.setAttribute("aria-pressed", card.classList.contains("flipped") ? "true" : "false");
     }));
   }
 
   function bindChecklists() {
-    $(".checklist-block").forEach(block => {
-      const boxes = $('input[type="checkbox"]', block);
+    $$(".checklist-block").forEach(block => {
+      const boxes = $$('input[type="checkbox"]', block);
       const count = $(".checklist-count", block);
       const bar = $(".checklist-progress .progressbar span", block);
       const refresh = () => {
@@ -315,9 +315,9 @@
   }
 
   function bindRanks() {
-    $(".rank-block").forEach(block => {
+    $$(".rank-block").forEach(block => {
       const list = $(".rank-list", block);
-      const renumber = () => $(".rank-number", list).forEach((n,i) => n.textContent = i + 1);
+      const renumber = () => $$(".rank-number", list).forEach((n,i) => n.textContent = i + 1);
       list.addEventListener("click", event => {
         const btn = event.target.closest("button");
         if (!btn) return;
@@ -334,8 +334,8 @@
   }
 
   function bindSequences() {
-    $(".sequence-block").forEach(block => {
-      const options = $(".sequence-option", block);
+    $$(".sequence-block").forEach(block => {
+      const options = $$(".sequence-option", block);
       const slots = $(".sequence-slots", block);
       const feedback = $(".sequence-feedback", block);
       let chosen = [];
