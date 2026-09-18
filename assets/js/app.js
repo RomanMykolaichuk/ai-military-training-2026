@@ -89,7 +89,7 @@
 
         <section class="notice">
           <strong>Повний контент курсу доступний</strong>
-          <p>Усі 13 занять мають пояснення, візуальні моделі, професійно орієнтовані навчальні приклади та інтерактивні вправи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
+          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 10–12 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
         </section>
 
         <section class="section" id="topics">
@@ -441,7 +441,7 @@
         <div class="eyebrow" style="color:var(--accent)">${esc(content?.kicker || lesson.topicTitle)}</div>
         <h1 class="lesson-title">${esc(lesson.no)} · ${esc(lesson.title)}</h1>
         <p class="lesson-lead">${esc(content?.lead || "")}</p>
-        <div class="lesson-info"><span class="tag">${esc(lesson.type)}</span><span class="tag">${esc(content?.duration || lesson.hours + " год за програмою")}</span>${statusTag(lesson.status)}</div>
+        <div class="lesson-info"><span class="tag">${esc(lesson.type)}</span><span class="tag">${esc(content?.duration || lesson.hours + " год за програмою")}</span><span class="tag">${content?.sections?.length || 0} навчальних блоків</span>${statusTag(lesson.status)}</div>
       </section>
 
       <section class="outcomes">
