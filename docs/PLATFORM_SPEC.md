@@ -102,19 +102,20 @@ The existing interactive schedule is preserved as `schedule.html`.
 
 ## 7. Implemented scope
 
-The first implementation provides:
-- new course home page;
+The platform now provides:
+- a complete course home page;
 - navigation for all 13 lessons;
-- reusable data-driven lesson engine;
-- preserved schedule page;
-- complete interactive prototype for lesson 2/1;
-- local progress;
-- Prompt Builder;
-- quick quiz;
+- complete interactive content for all 13 lessons;
+- a reusable data-driven lesson engine;
+- the preserved interactive schedule page;
+- visual concept maps, cards, timelines, comparison matrices and process flows;
+- reusable prompt / planning generators;
+- scenario-based choices and quick self-checks;
+- an educational AI risk checker;
+- local browser-only progress;
 - responsive UI;
-- GitHub Pages-compatible static structure.
-
-The remaining lesson pages intentionally use the same shell and will be populated iteratively.
+- a final assessment preparation page;
+- a GitHub Pages-compatible static structure.
 
 ## 8. Repository structure
 
@@ -130,7 +131,10 @@ The remaining lesson pages intentionally use the same shell and will be populate
 │   └── js/
 │       └── app.js
 ├── data/
-│   └── course-data.js
+│   ├── course-data.js
+│   ├── lessons-topic1.js
+│   └── lessons-topic2.js
+├── final.html
 ├── docs/
 │   └── PLATFORM_SPEC.md
 ├── materials/
@@ -175,22 +179,18 @@ When a learner is asked to use a public AI service, the lesson must show a visib
 
 ## 12. Development sequence
 
-1. Validate home + lesson 2/1 physically on desktop and mobile.
-2. Refine reusable lesson components.
-3. Fill Topic 1.
-4. Fill Topic 2 lessons 2/2–2/8.
-5. Add final project workspace/checklist.
-6. Add infographics and visual assets.
-7. Optional AI adapters.
-8. Accessibility and performance pass.
-9. Final GitHub Pages release.
+1. Physical test of all pages on GitHub Pages.
+2. Accessibility and keyboard-navigation pass.
+3. Add optional high-quality visual assets where they materially improve explanation.
+4. Add optional AI adapters only where pedagogically useful.
+5. Final content proofreading against instructor delivery.
 
 ## 13. Acceptance criteria for v1
 
 - root page opens without console errors;
 - all lesson cards resolve to valid pages;
 - schedule remains available;
-- lesson 2/1 Prompt Builder works;
+- all reusable generators and lesson interactions work;
 - quiz feedback works;
 - progress persists after page refresh;
 - no network request is required for core functionality;
