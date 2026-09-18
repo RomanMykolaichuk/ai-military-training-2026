@@ -89,7 +89,7 @@
 
         <section class="notice">
           <strong>Повний контент курсу доступний</strong>
-          <p>Усі 13 занять мають пояснення, візуальні моделі, професійно орієнтовані навчальні приклади та інтерактивні вправи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
+          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 10–12 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
         </section>
 
         <section class="section" id="topics">
@@ -164,6 +164,45 @@
       </div></section>`;
   }
 
+  function accordionBlock(block) {
+    return `<section class="content-block"><h2>${esc(block.title)}</h2>${block.intro ? `<p>${esc(block.intro)}</p>` : ""}
+      <div class="accordion-list">${block.items.map((item,i) => `<details class="accordion-item"><summary><span>${String(i+1).padStart(2,"0")}</span>${esc(item.title)}</summary><div class="accordion-body">${esc(item.body)}</div></details>`).join("")}</div>
+    </section>`;
+  }
+
+  function flashcardsBlock(block) {
+    return `<section class="content-block"><h2>${esc(block.title)}</h2><p class="micro-note">Натисніть картку, щоб відкрити пояснення.</p>
+      <div class="flash-grid">${block.items.map(item => `<button type="button" class="flash-card"><span class="flash-front">${esc(item.front)}</span><span class="flash-back">${esc(item.back)}</span><small>натисніть, щоб перевернути</small></button>`).join("")}</div>
+    </section>`;
+  }
+
+  function checklistBlock(block, index) {
+    return `<section class="content-block checklist-block" data-checklist="${index}"><h2>${esc(block.title)}</h2>
+      <div class="checklist-progress"><span class="checklist-count">0 / ${block.items.length}</span><div class="progressbar"><span style="width:0"></span></div></div>
+      <div class="interactive-checklist">${block.items.map((item,i) => `<label class="check-row"><input type="checkbox" value="${i}"><span>${esc(item)}</span></label>`).join("")}</div>
+    </section>`;
+  }
+
+  function rankBlock(block, index) {
+    return `<section class="content-block rank-block" data-rank="${index}"><h2>${esc(block.title)}</h2>${block.intro ? `<p>${esc(block.intro)}</p>` : ""}
+      <ol class="rank-list">${block.items.map((item,i) => `<li><span class="rank-number">${i+1}</span><span class="rank-label">${esc(item)}</span><span class="rank-actions"><button type="button" class="rank-up" title="Підняти">↑</button><button type="button" class="rank-down" title="Опустити">↓</button></span></li>`).join("")}</ol>
+      <p class="micro-note">Це інструмент для обговорення: порядок не зберігається і не має автоматично «правильної» відповіді.</p>
+    </section>`;
+  }
+
+  function sequenceBlock(block, index) {
+    const mixed = [...block.items].reverse();
+    return `<section class="content-block sequence-block" data-sequence="${index}"><h2>${esc(block.title)}</h2>${block.intro ? `<p>${esc(block.intro)}</p>` : ""}
+      <div class="sequence-options">${mixed.map(label => {
+        const order = block.items.indexOf(label);
+        return `<button type="button" class="sequence-option" data-order="${order}">${esc(label)}</button>`;
+      }).join("")}</div>
+      <div class="sequence-built"><strong>Ваша послідовність:</strong><div class="sequence-slots"></div></div>
+      <div class="builder-actions"><button type="button" class="btn ghost sequence-reset">Скинути</button></div>
+      <div class="sequence-feedback" aria-live="polite"></div>
+    </section>`;
+  }
+
   function riskBlock(block) {
     return `<section class="content-block risk-block"><h2>${esc(block.title)}</h2><p>${esc(block.description)}</p>
       <div class="risk-grid">
@@ -198,6 +237,11 @@
     if (block.type === "generator" || block.type === "builder") return generatorBlock(block, index);
     if (block.type === "scenario") return scenarioBlock(block, index);
     if (block.type === "radar") return radarBlock(block);
+    if (block.type === "accordion") return accordionBlock(block);
+    if (block.type === "flashcards") return flashcardsBlock(block);
+    if (block.type === "checklist") return checklistBlock(block, index);
+    if (block.type === "rank") return rankBlock(block, index);
+    if (block.type === "sequence") return sequenceBlock(block, index);
     if (block.type === "risk") return riskBlock(block);
     if (block.type === "exercise") return exerciseBlock(block);
     if (block.type === "check") return checkBlock(block);
@@ -244,6 +288,80 @@
         feedback.textContent = (btn.dataset.correct === "true" ? "✓ " : "→ ") + btn.dataset.feedback;
         feedback.className = "scenario-feedback " + (btn.dataset.correct === "true" ? "ok" : "warn");
       }));
+    });
+  }
+
+  function bindFlashcards() {
+    $(".flash-card").forEach(card => card.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+      card.setAttribute("aria-pressed", card.classList.contains("flipped") ? "true" : "false");
+    }));
+  }
+
+  function bindChecklists() {
+    $(".checklist-block").forEach(block => {
+      const boxes = $('input[type="checkbox"]', block);
+      const count = $(".checklist-count", block);
+      const bar = $(".checklist-progress .progressbar span", block);
+      const refresh = () => {
+        const checked = boxes.filter(x => x.checked).length;
+        count.textContent = `${checked} / ${boxes.length}`;
+        bar.style.width = boxes.length ? `${Math.round(checked / boxes.length * 100)}%` : "0%";
+        boxes.forEach(box => box.closest(".check-row")?.classList.toggle("checked", box.checked));
+      };
+      boxes.forEach(box => box.addEventListener("change", refresh));
+      refresh();
+    });
+  }
+
+  function bindRanks() {
+    $(".rank-block").forEach(block => {
+      const list = $(".rank-list", block);
+      const renumber = () => $(".rank-number", list).forEach((n,i) => n.textContent = i + 1);
+      list.addEventListener("click", event => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        const row = btn.closest("li");
+        if (btn.classList.contains("rank-up") && row.previousElementSibling) {
+          list.insertBefore(row, row.previousElementSibling);
+        }
+        if (btn.classList.contains("rank-down") && row.nextElementSibling) {
+          list.insertBefore(row.nextElementSibling, row);
+        }
+        renumber();
+      });
+    });
+  }
+
+  function bindSequences() {
+    $(".sequence-block").forEach(block => {
+      const options = $(".sequence-option", block);
+      const slots = $(".sequence-slots", block);
+      const feedback = $(".sequence-feedback", block);
+      let chosen = [];
+      const refresh = () => {
+        slots.innerHTML = chosen.map((x,i) => `<span class="sequence-chip"><b>${i+1}</b> ${esc(x.label)}</span>`).join("");
+        if (chosen.length === options.length) {
+          const correct = chosen.every((x,i) => Number(x.order) === i);
+          feedback.textContent = correct ? "✓ Послідовність правильна." : "Послідовність потребує перегляду. Скиньте і спробуйте ще раз.";
+          feedback.className = "sequence-feedback " + (correct ? "ok" : "warn");
+        } else {
+          feedback.textContent = `Обрано ${chosen.length} із ${options.length}`;
+          feedback.className = "sequence-feedback";
+        }
+      };
+      options.forEach(btn => btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        chosen.push({order:btn.dataset.order,label:btn.textContent});
+        refresh();
+      }));
+      $(".sequence-reset", block)?.addEventListener("click", () => {
+        chosen = [];
+        options.forEach(btn => btn.disabled = false);
+        refresh();
+      });
+      refresh();
     });
   }
 
@@ -323,7 +441,7 @@
         <div class="eyebrow" style="color:var(--accent)">${esc(content?.kicker || lesson.topicTitle)}</div>
         <h1 class="lesson-title">${esc(lesson.no)} · ${esc(lesson.title)}</h1>
         <p class="lesson-lead">${esc(content?.lead || "")}</p>
-        <div class="lesson-info"><span class="tag">${esc(lesson.type)}</span><span class="tag">${esc(content?.duration || lesson.hours + " год за програмою")}</span>${statusTag(lesson.status)}</div>
+        <div class="lesson-info"><span class="tag">${esc(lesson.type)}</span><span class="tag">${esc(content?.duration || lesson.hours + " год за програмою")}</span><span class="tag">${content?.sections?.length || 0} навчальних блоків</span>${statusTag(lesson.status)}</div>
       </section>
 
       <section class="outcomes">
@@ -347,6 +465,10 @@
 
     bindGenerators();
     bindScenarios();
+    bindFlashcards();
+    bindChecklists();
+    bindRanks();
+    bindSequences();
     bindRiskChecker();
     bindQuiz();
     bindCompletion(id);
