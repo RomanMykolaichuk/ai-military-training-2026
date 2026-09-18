@@ -100,7 +100,7 @@ The existing interactive schedule is preserved as `schedule.html`.
 | 2/7 | OPSEC / ethics / legal risk checker |
 | 2/8 | Lesson / methodological material builder |
 
-## 7. MVP scope
+## 7. Implemented scope
 
 The first implementation provides:
 - new course home page;
