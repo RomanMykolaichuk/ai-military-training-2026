@@ -83,13 +83,13 @@
         <section class="stats" aria-label="Структура курсу">
           <div class="stat"><strong>2</strong><span>навчальні теми</span></div>
           <div class="stat"><strong>18</strong><span>годин теоретичної теми</span></div>
-          <div class="stat"><strong>30</strong><span>годин практичної теми</span></div>
+          <div class="stat"><strong>26</strong><span>інтерактивних візуальних схем</span></div>
           <div class="stat"><strong>${ready}/${allLessons.length}</strong><span>занять з інтерактивним контентом</span></div>
         </section>
 
         <section class="notice">
           <strong>Повний контент курсу доступний</strong>
-          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 10–12 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
+          <p>Усі 13 занять розширено приблизно вдвічі: кожне містить 12–14 навчальних блоків, візуальні моделі, професійно орієнтовані приклади та кілька типів інтерактивної роботи. Core-платформа працює без зовнішніх API; введені у конструктори дані залишаються у браузері.</p>
         </section>
 
         <section class="section" id="topics">
@@ -203,6 +203,22 @@
     </section>`;
   }
 
+  function visualBlock(block, index) {
+    const center = block.center ? `<div class="visual-center">${esc(block.center)}</div>` : "";
+    return `<section class="content-block visual-block" data-visual="${index}">
+      <div class="visual-kicker">ВІЗУАЛЬНА СХЕМА</div>
+      <h2>${esc(block.title)}</h2>
+      ${block.subtitle ? `<p class="visual-subtitle">${esc(block.subtitle)}</p>` : ""}
+      <div class="visual-stage visual-${esc(block.layout || "pipeline")}">
+        ${center}
+        <div class="visual-items">
+          ${block.items.map((item,i) => `<button type="button" class="visual-node" data-detail="${esc(item.detail)}"><span class="visual-index">${String(i+1).padStart(2,"0")}</span><strong>${esc(item.label)}</strong></button>`).join("")}
+        </div>
+      </div>
+      <div class="visual-detail" aria-live="polite">Натисніть на елемент схеми, щоб побачити пояснення.</div>
+    </section>`;
+  }
+
   function riskBlock(block) {
     return `<section class="content-block risk-block"><h2>${esc(block.title)}</h2><p>${esc(block.description)}</p>
       <div class="risk-grid">
@@ -242,6 +258,7 @@
     if (block.type === "checklist") return checklistBlock(block, index);
     if (block.type === "rank") return rankBlock(block, index);
     if (block.type === "sequence") return sequenceBlock(block, index);
+    if (block.type === "visual") return visualBlock(block, index);
     if (block.type === "risk") return riskBlock(block);
     if (block.type === "exercise") return exerciseBlock(block);
     if (block.type === "check") return checkBlock(block);
@@ -292,15 +309,15 @@
   }
 
   function bindFlashcards() {
-    $(".flash-card").forEach(card => card.addEventListener("click", () => {
+    $$(".flash-card").forEach(card => card.addEventListener("click", () => {
       card.classList.toggle("flipped");
       card.setAttribute("aria-pressed", card.classList.contains("flipped") ? "true" : "false");
     }));
   }
 
   function bindChecklists() {
-    $(".checklist-block").forEach(block => {
-      const boxes = $('input[type="checkbox"]', block);
+    $$(".checklist-block").forEach(block => {
+      const boxes = $$('input[type="checkbox"]', block);
       const count = $(".checklist-count", block);
       const bar = $(".checklist-progress .progressbar span", block);
       const refresh = () => {
@@ -315,9 +332,9 @@
   }
 
   function bindRanks() {
-    $(".rank-block").forEach(block => {
+    $$(".rank-block").forEach(block => {
       const list = $(".rank-list", block);
-      const renumber = () => $(".rank-number", list).forEach((n,i) => n.textContent = i + 1);
+      const renumber = () => $$(".rank-number", list).forEach((n,i) => n.textContent = i + 1);
       list.addEventListener("click", event => {
         const btn = event.target.closest("button");
         if (!btn) return;
@@ -334,8 +351,8 @@
   }
 
   function bindSequences() {
-    $(".sequence-block").forEach(block => {
-      const options = $(".sequence-option", block);
+    $$(".sequence-block").forEach(block => {
+      const options = $$(".sequence-option", block);
       const slots = $(".sequence-slots", block);
       const feedback = $(".sequence-feedback", block);
       let chosen = [];
@@ -362,6 +379,17 @@
         refresh();
       });
       refresh();
+    });
+  }
+
+  function bindVisuals() {
+    $$(".visual-block").forEach(block => {
+      const detail = $(".visual-detail", block);
+      $$(".visual-node", block).forEach(node => node.addEventListener("click", () => {
+        $$(".visual-node", block).forEach(n => n.classList.remove("active"));
+        node.classList.add("active");
+        detail.textContent = node.dataset.detail || "";
+      }));
     });
   }
 
@@ -469,6 +497,7 @@
     bindChecklists();
     bindRanks();
     bindSequences();
+    bindVisuals();
     bindRiskChecker();
     bindQuiz();
     bindCompletion(id);
