@@ -1,6 +1,7 @@
 (() => {
   const course = window.COURSE;
   const lessonContent = window.LESSON_CONTENT || {};
+  const lessonImages = window.LESSON_IMAGES || {};
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const esc = (v = "") => String(v).replace(/[&<>'"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[ch]));
@@ -108,6 +109,18 @@
           </div>
         </section>
       </main>${footer()}`;
+  }
+
+  function lessonImageBlock(id) {
+    const image = lessonImages[id];
+    if (!image) return "";
+    return `<figure class="lesson-infographic">
+      <button class="infographic-open" type="button" data-image-src="${esc(image.src)}" data-image-alt="${esc(image.alt)}" aria-label="Відкрити інфографіку на весь екран">
+        <img src="${esc(image.src)}" alt="${esc(image.alt)}" loading="eager" decoding="async">
+        <span class="infographic-zoom">⤢ Відкрити на весь екран</span>
+      </button>
+      <figcaption>${esc(image.caption || "")}</figcaption>
+    </figure>`;
   }
 
   function conceptBlock(block) {
@@ -263,6 +276,28 @@
     if (block.type === "exercise") return exerciseBlock(block);
     if (block.type === "check") return checkBlock(block);
     return "";
+  }
+
+  function bindInfographicLightbox() {
+    const trigger = $(".infographic-open");
+    if (!trigger) return;
+    trigger.addEventListener("click", () => {
+      const overlay = document.createElement("div");
+      overlay.className = "infographic-lightbox";
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.innerHTML = `<button type="button" class="infographic-close" aria-label="Закрити">×</button><img src="${esc(trigger.dataset.imageSrc)}" alt="${esc(trigger.dataset.imageAlt || "")}">`;
+      document.body.appendChild(overlay);
+      const close = () => overlay.remove();
+      $(".infographic-close", overlay).addEventListener("click", close);
+      overlay.addEventListener("click", e => { if (e.target === overlay) close(); });
+      document.addEventListener("keydown", function onKey(e) {
+        if (e.key === "Escape") {
+          close();
+          document.removeEventListener("keydown", onKey);
+        }
+      });
+    });
   }
 
   function bindGenerators() {
@@ -478,6 +513,7 @@
       </section>
 
       <div class="lesson-content">
+        ${lessonImageBlock(id)}
         ${content ? content.sections.map((block,i) => blockHtml(block,i)).join("") : '<section class="placeholder"><strong>Матеріал відсутній</strong></section>'}
         ${content ? `<section class="content-block takeaways"><h2>Ключові висновки</h2><ul>${content.takeaways.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
       </div>
@@ -491,6 +527,7 @@
       </div>
     </main>${footer()}`;
 
+    bindInfographicLightbox();
     bindGenerators();
     bindScenarios();
     bindFlashcards();
