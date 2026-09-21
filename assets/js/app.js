@@ -477,19 +477,6 @@
         <div class="panel"><h3>Центральний інтерактив</h3><p>${esc(lesson.interaction)}</p><div class="progressbar"><span id="lessonProgress"></span></div><p class="micro-note">Прогрес зберігається лише у цьому браузері.</p></div>
       </section>
 
-      ${lesson.image ? `
-      <section class="lesson-infographic">
-        <a href="${esc(lesson.image)}" target="_blank" rel="noopener">
-          <img src="${esc(lesson.image)}"
-               alt="Інфографіка до заняття ${esc(lesson.no)}: ${esc(lesson.title)}"
-               loading="lazy">
-        </a>
-        <div class="infographic-caption">
-          <strong>Інфографіка заняття</strong>
-          <span>Натисніть, щоб відкрити у повному розмірі.</span>
-        </div>
-      </section>` : ""}
-
       <div class="lesson-content">
         ${content ? content.sections.map((block,i) => blockHtml(block,i)).join("") : '<section class="placeholder"><strong>Матеріал відсутній</strong></section>'}
         ${content ? `<section class="content-block takeaways"><h2>Ключові висновки</h2><ul>${content.takeaways.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
